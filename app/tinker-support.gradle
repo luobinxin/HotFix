@@ -1,0 +1,63 @@
+apply plugin: 'com.tencent.bugly.tinker-support'
+
+def bakPath = file("${buildDir}/bakApk/")
+
+def versionName = android.defaultConfig.versionName
+
+/**
+ * 在打补丁包时修改此处，填写上次构建生成的基准包目录
+ */
+def baseApkDir = "app-1207-12-23-06"      //-----------------need change when buildTinkerPatchRelease
+
+def buildType = "release" // release|debug
+
+def appName = "HotFix-${buildType}-v${versionName}"  //apk名称 可自定义  ， 最终 打包出来的基准apk名称 HotFix-release-v1.2.apk
+
+/**
+ * 对于插件各参数的详细解析请参考
+ */
+tinkerSupport {
+
+    // 开启tinker-support插件，默认值true
+    enable = true
+
+    // 指定归档目录，默认值当前module的子目录tinker
+    autoBackupApkDir = "${bakPath}"
+
+    // 是否启用覆盖tinkerPatch配置功能，默认值false
+    // 开启后tinkerPatch配置不生效，即无需添加tinkerPatch
+    overrideTinkerPatchConfiguration = true
+
+    //基线版本导出名称apk
+    targetFileNamePrefix = "${appName}"
+
+    // 编译补丁包时，必需指定基线版本的apk，默认值为空
+    // 如果为空，则表示不是进行补丁包的编译
+    // @{link tinkerPatch.oldApk }
+    baseApk = "${bakPath}/${baseApkDir}/${appName}.apk"
+
+    // 对应tinker插件applyMapping
+    baseApkProguardMapping = "${bakPath}/${baseApkDir}/${appName}-mapping.txt"
+
+    // 对应tinker插件applyResourceMapping
+    baseApkResourceMapping = "${bakPath}/${baseApkDir}/${appName}-R.txt"
+
+    // 构建基准包和补丁包都要指定不同的tinkerId，并且必须保证唯一性
+    // tinkerId = "patch-1.1.07" // base | patch ------- need change when buildTinkerPatchRelease  "base" ==> "patch"
+    tinkerId = "patch-${versionName}"
+
+    // 是否启用加固模式，默认为false.(tinker-spport 1.0.7起支持）
+    isProtectedApp = true
+
+    // 是否开启反射Application模式
+    enableProxyApplication = false
+
+    // 是否支持新增非export的Activity（注意：设置为true才能修改AndroidManifest文件）
+    supportHotplugComponent = true
+
+
+}
+
+
+
+
