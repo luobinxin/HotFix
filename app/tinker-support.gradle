@@ -7,7 +7,7 @@ def versionName = android.defaultConfig.versionName
 /**
  * 在打补丁包时修改此处，填写上次构建生成的基准包目录
  */
-def baseApkDir = "app-1207-12-23-06"      //-----------------need change when buildTinkerPatchRelease
+def baseApkDir = "app-0701-17-05-38"      //-----------------need change when buildTinkerPatchRelease
 
 def buildType = "release" // release|debug
 
@@ -47,7 +47,7 @@ tinkerSupport {
     tinkerId = "patch-${versionName}"
 
     // 是否启用加固模式，默认为false.(tinker-spport 1.0.7起支持）
-    isProtectedApp = true
+    isProtectedApp = false
 
     // 是否开启反射Application模式
     enableProxyApplication = false
